@@ -50,7 +50,7 @@
 /* USER CODE BEGIN PM */
 
 
-#define BUFFER_SIZE		20
+#define BUFFER_SIZE				20
 #define BUFFER_SIZE_MEDIAN		20
 
 
