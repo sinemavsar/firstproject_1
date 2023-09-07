@@ -31,23 +31,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .comment      00000043  00000000  00000000  000200cc  2**0
                   CONTENTS, READONLY
- 14 .debug_info   0000d95e  00000000  00000000  0002010f  2**0
+ 14 .debug_info   0000d960  00000000  00000000  0002010f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 00001deb  00000000  00000000  0002da6d  2**0
+ 15 .debug_abbrev 00001deb  00000000  00000000  0002da6f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00000cb0  00000000  00000000  0002f858  2**3
+ 16 .debug_aranges 00000cb0  00000000  00000000  0002f860  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_rnglists 000009f1  00000000  00000000  00030508  2**0
+ 17 .debug_rnglists 000009f1  00000000  00000000  00030510  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  00021a41  00000000  00000000  00030ef9  2**0
+ 18 .debug_macro  00021a41  00000000  00000000  00030f01  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   0000f2c7  00000000  00000000  0005293a  2**0
+ 19 .debug_line   0000f2c8  00000000  00000000  00052942  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000d5868  00000000  00000000  00061c01  2**0
+ 20 .debug_str    000d5868  00000000  00000000  00061c0a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  00003ca4  00000000  00000000  0013746c  2**2
+ 21 .debug_frame  00003ca4  00000000  00000000  00137474  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000075  00000000  00000000  0013b110  2**0
+ 22 .debug_line_str 00000075  00000000  00000000  0013b118  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1279,7 +1279,7 @@ uint16_t Read_ADC()
  8000f5e:	480b      	ldr	r0, [pc, #44]	; (8000f8c <Read_ADC+0x34>)
  8000f60:	f000 ff5e 	bl	8001e20 <HAL_ADC_Start>
   	uint16_t temp;
-
+// ADC dönüşümünü başlatır
   	if(HAL_ADC_PollForConversion(&hadc1, 100000 ) == HAL_OK)
  8000f64:	490a      	ldr	r1, [pc, #40]	; (8000f90 <Read_ADC+0x38>)
  8000f66:	4809      	ldr	r0, [pc, #36]	; (8000f8c <Read_ADC+0x34>)
@@ -1288,16 +1288,18 @@ uint16_t Read_ADC()
  8000f6e:	2b00      	cmp	r3, #0
  8000f70:	d104      	bne.n	8000f7c <Read_ADC+0x24>
   	{
+// ADC tarafından ölçülen değeri alır
   		temp = HAL_ADC_GetValue(&hadc1);
  8000f72:	4806      	ldr	r0, [pc, #24]	; (8000f8c <Read_ADC+0x34>)
  8000f74:	f001 f8e4 	bl	8002140 <HAL_ADC_GetValue>
  8000f78:	4603      	mov	r3, r0
  8000f7a:	80fb      	strh	r3, [r7, #6]
   	}
+// ADC'yi kapatır
   	HAL_ADC_Stop(&hadc1);
  8000f7c:	4803      	ldr	r0, [pc, #12]	; (8000f8c <Read_ADC+0x34>)
  8000f7e:	f001 f821 	bl	8001fc4 <HAL_ADC_Stop>
-
+// Ölçüm sonucunu döndürür
   	return temp;
  8000f82:	88fb      	ldrh	r3, [r7, #6]
 }
@@ -1354,10 +1356,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+// LED'leri kontrol eden işlevi çağırır
 	  ledHandle();
  8000fba:	f000 fb4b 	bl	8001654 <ledHandle>
-
 	  if ((time_count-buffer_counter_median) > 5){
  8000fbe:	4b53      	ldr	r3, [pc, #332]	; (800110c <main+0x178>)
  8000fc0:	e9d3 4500 	ldrd	r4, r5, [r3]
@@ -1380,6 +1381,7 @@ int main(void)
  8000fec:	4603      	mov	r3, r0
  8000fee:	2b00      	cmp	r3, #0
  8000ff0:	d017      	beq.n	8001022 <main+0x8e>
+// Ölçüm aralığını kontrol etmek için bir zaman karşılaştırması yapar
 	 		  buffer_counter_median=time_count;
  8000ff2:	4b46      	ldr	r3, [pc, #280]	; (800110c <main+0x178>)
  8000ff4:	e9d3 2300 	ldrd	r2, r3, [r3]
@@ -1389,6 +1391,7 @@ int main(void)
  8001000:	4603      	mov	r3, r0
  8001002:	4a43      	ldr	r2, [pc, #268]	; (8001110 <main+0x17c>)
  8001004:	6013      	str	r3, [r2, #0]
+// ADC ölçümünü alır ve filtreleme tamponuna kaydeder
 	 		  filter_buffer_median[buffer_index_median] =  Read_ADC();
  8001006:	4b44      	ldr	r3, [pc, #272]	; (8001118 <main+0x184>)
  8001008:	681c      	ldr	r4, [r3, #0]
@@ -1410,6 +1413,7 @@ int main(void)
  8001024:	681b      	ldr	r3, [r3, #0]
  8001026:	2b13      	cmp	r3, #19
  8001028:	f040 80b0 	bne.w	800118c <main+0x1f8>
+// Median filtreleme işlemi yapmak için tampon dolmuş mu kontrol eder
 		  buffer_index_median=0;
  800102c:	4b3a      	ldr	r3, [pc, #232]	; (8001118 <main+0x184>)
  800102e:	2200      	movs	r2, #0
@@ -1433,7 +1437,7 @@ int main(void)
  8001056:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
  800105a:	429a      	cmp	r2, r3
  800105c:	d917      	bls.n	800108e <main+0xfa>
-		              // Değişkenleri yer değiştir
+// Median filtreleme işlemi için değişkenleri sıralar
 		              uint16_t temp = filter_buffer_median[i];
  800105e:	4a2f      	ldr	r2, [pc, #188]	; (800111c <main+0x188>)
  8001060:	f8d7 3214 	ldr.w	r3, [r7, #532]	; 0x214
@@ -1468,7 +1472,7 @@ int main(void)
 		          }
 		      }
 		  }
-
+// Median filtreleme sonucunu hesaplar ve tampona kaydeder
 		  buffer_counter_median = (filter_buffer_median[BUFFER_SIZE_MEDIAN / 2 - 1] + filter_buffer_median[BUFFER_SIZE_MEDIAN / 2]) / 2;
  80010b2:	4b1a      	ldr	r3, [pc, #104]	; (800111c <main+0x188>)
  80010b4:	8a5b      	ldrh	r3, [r3, #18]
@@ -1482,7 +1486,6 @@ int main(void)
  80010c4:	461a      	mov	r2, r3
  80010c6:	4b12      	ldr	r3, [pc, #72]	; (8001110 <main+0x17c>)
  80010c8:	601a      	str	r2, [r3, #0]
-
 		  filter_buffer[buffer_index] =  buffer_counter_median;
  80010ca:	4b11      	ldr	r3, [pc, #68]	; (8001110 <main+0x17c>)
  80010cc:	681a      	ldr	r2, [r3, #0]
@@ -1504,6 +1507,7 @@ int main(void)
  80010e6:	681b      	ldr	r3, [r3, #0]
  80010e8:	2b13      	cmp	r3, #19
  80010ea:	d14f      	bne.n	800118c <main+0x1f8>
+// Daha fazla veri biriktiğinde ADC değerini hesaplar
 		  buffer_index = 0;
  80010ec:	4b0c      	ldr	r3, [pc, #48]	; (8001120 <main+0x18c>)
  80010ee:	2200      	movs	r2, #0
@@ -1559,7 +1563,7 @@ int main(void)
  800117a:	b29a      	uxth	r2, r3
  800117c:	4b5c      	ldr	r3, [pc, #368]	; (80012f0 <main+0x35c>)
  800117e:	801a      	strh	r2, [r3, #0]
-		 setLedPeriyot(&led_1, adc_value);
+		 setLedPeriyot(&led_1, adc_value);// LED'in yanma periyodunu ayarlar
  8001180:	4b5b      	ldr	r3, [pc, #364]	; (80012f0 <main+0x35c>)
  8001182:	881b      	ldrh	r3, [r3, #0]
  8001184:	4619      	mov	r1, r3
@@ -1575,7 +1579,7 @@ int main(void)
  8001192:	881b      	ldrh	r3, [r3, #0]
  8001194:	429a      	cmp	r2, r3
  8001196:	f43f af10 	beq.w	8000fba <main+0x26>
-
+// Önceki ADC değeri ile yeni ölçülen değeri karşılaştırır
 		  adc_value_old = adc_value;
  800119a:	4b55      	ldr	r3, [pc, #340]	; (80012f0 <main+0x35c>)
  800119c:	881a      	ldrh	r2, [r3, #0]
@@ -1592,6 +1596,7 @@ int main(void)
  80011b4:	2100      	movs	r1, #0
  80011b6:	4618      	mov	r0, r3
  80011b8:	f003 f9bc 	bl	8004534 <memset>
+// İletiyi başlık ve ayracı ekleyerek oluşturur
 		  sprintf((char *)veri,"********************************\n\n\r  ");
  80011bc:	463b      	mov	r3, r7
  80011be:	494f      	ldr	r1, [pc, #316]	; (80012fc <main+0x368>)
@@ -1607,7 +1612,7 @@ int main(void)
  80011d4:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
  80011d8:	4849      	ldr	r0, [pc, #292]	; (8001300 <main+0x36c>)
  80011da:	f002 fe16 	bl	8003e0a <HAL_UART_Transmit>
-
+// LED periyotlarını ve potansiyometre değerini iletiye ekler
 		  memset(veri,0,512);
  80011de:	463b      	mov	r3, r7
  80011e0:	f44f 7200 	mov.w	r2, #512	; 0x200
@@ -2314,14 +2319,15 @@ __STATIC_FORCEINLINE void __disable_irq(void)
 	...
 
 08001654 <ledHandle>:
-led_t led_2 = {0, 0, 0.0, 1000};
 led_t led_3 = {0, 0, 0.0, 1000};
 led_t led_4 = {0, 0, 0.0, 1000};
 
+// LED'lerin durumunu ve yanma süresini kontrol eden işlev
 void ledHandle(void)
 {
  8001654:	b5b0      	push	{r4, r5, r7, lr}
  8001656:	af00      	add	r7, sp, #0
+// LED1'in yanma süresini kontrol et
 	  if((time_count - led_1.count) > led_1.period/2){
  8001658:	4bac      	ldr	r3, [pc, #688]	; (800190c <ledHandle+0x2b8>)
  800165a:	e9d3 4500 	ldrd	r4, r5, [r3]
@@ -2362,7 +2368,7 @@ void ledHandle(void)
  80016ac:	4603      	mov	r3, r0
  80016ae:	4a98      	ldr	r2, [pc, #608]	; (8001910 <ledHandle+0x2bc>)
  80016b0:	6013      	str	r3, [r2, #0]
-
+// LED1'in durumunu değiştir (yanıp sönme)
 		   if (led_1.durum == 0) {
  80016b2:	4b97      	ldr	r3, [pc, #604]	; (8001910 <ledHandle+0x2bc>)
  80016b4:	685b      	ldr	r3, [r3, #4]
@@ -2380,7 +2386,7 @@ void ledHandle(void)
  80016c4:	2200      	movs	r2, #0
  80016c6:	605a      	str	r2, [r3, #4]
 		   }
-
+// LED1'in fiziksel durumunu güncelle
 		    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, led_1.durum);
  80016c8:	4b91      	ldr	r3, [pc, #580]	; (8001910 <ledHandle+0x2bc>)
  80016ca:	685b      	ldr	r3, [r3, #4]
@@ -2391,7 +2397,7 @@ void ledHandle(void)
  80016d6:	f001 fa0d 	bl	8002af4 <HAL_GPIO_WritePin>
 
 		  }
-
+// Aynı işlemler LED2, LED3 ve LED4 için tekrarlanır
 		  if((time_count - led_2.count) > led_2.period/2){
  80016da:	4b8c      	ldr	r3, [pc, #560]	; (800190c <ledHandle+0x2b8>)
  80016dc:	e9d3 4500 	ldrd	r4, r5, [r3]
@@ -2599,9 +2605,8 @@ void ledHandle(void)
  8001856:	f44f 4100 	mov.w	r1, #32768	; 0x8000
  800185a:	482e      	ldr	r0, [pc, #184]	; (8001914 <ledHandle+0x2c0>)
  800185c:	f001 f94a 	bl	8002af4 <HAL_GPIO_WritePin>
-
 		  }
-
+// LED'lerin frekansını güncelle
 		  led_1.frequency = 1.0/led_1.period;
  8001860:	4b2b      	ldr	r3, [pc, #172]	; (8001910 <ledHandle+0x2bc>)
  8001862:	68db      	ldr	r3, [r3, #12]
@@ -2674,7 +2679,6 @@ void ledHandle(void)
  8001902:	4603      	mov	r3, r0
  8001904:	4a06      	ldr	r2, [pc, #24]	; (8001920 <ledHandle+0x2cc>)
  8001906:	6093      	str	r3, [r2, #8]
-
 }
  8001908:	bf00      	nop
  800190a:	bdb0      	pop	{r4, r5, r7, pc}
@@ -2687,9 +2691,7 @@ void ledHandle(void)
  8001924:	3ff00000 	.word	0x3ff00000
 
 08001928 <setLedPeriyot>:
-
-
-
+// LED'nin yanma süresini ayarlayan işlev
 void setLedPeriyot(led_t *led, int pri)
 {
  8001928:	b480      	push	{r7}

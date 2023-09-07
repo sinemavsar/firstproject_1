@@ -1,3 +1,7 @@
+/*Bu kodda potansiyometreden okunan 10 ADC değerinin medyanını alıp
+sonra alınan her 20 medyan değerinin ortalamasını alan bir kod yazdım.
+Bu kod, 10 ADC örneği alır, bunları sıralar, medyanını hesaplar ve ardından
+her 20 medyan değeri için bir ortalamayı hesaplar ve çıktısını verir. */
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -98,13 +102,15 @@ uint16_t Read_ADC()
 {
   	HAL_ADC_Start(&hadc1);
   	uint16_t temp;
-
+// ADC dönüşümünü başlatır
   	if(HAL_ADC_PollForConversion(&hadc1, 100000 ) == HAL_OK)
   	{
+// ADC tarafından ölçülen değeri alır
   		temp = HAL_ADC_GetValue(&hadc1);
   	}
+// ADC'yi kapatır
   	HAL_ADC_Stop(&hadc1);
-
+// Ölçüm sonucunu döndürür
   	return temp;
 }
 
@@ -158,53 +164,56 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+// LED'leri kontrol eden işlevi çağırır
 	  ledHandle();
-
 	  if ((time_count-buffer_counter_median) > 5){
+// Ölçüm aralığını kontrol etmek için bir zaman karşılaştırması yapar
 	 		  buffer_counter_median=time_count;
+// ADC ölçümünü alır ve filtreleme tamponuna kaydeder
 	 		  filter_buffer_median[buffer_index_median] =  Read_ADC();
 	 		  buffer_index_median++;
 	  }
 
 	  if(buffer_index_median == BUFFER_SIZE_MEDIAN - 1){
+// Median filtreleme işlemi yapmak için tampon dolmuş mu kontrol eder
 		  buffer_index_median=0;
 
 		  for (int i = 0; i < BUFFER_SIZE_MEDIAN - 1; i++) {
 		      for (int j = i + 1; j < BUFFER_SIZE_MEDIAN; j++) {
 		          if (filter_buffer_median[i] > filter_buffer_median[j]) {
-		              // Değişkenleri yer değiştir
+// Median filtreleme işlemi için değişkenleri sıralar
 		              uint16_t temp = filter_buffer_median[i];
 		              filter_buffer_median[i] = filter_buffer_median[j];
 		              filter_buffer_median[j] = temp;
 		          }
 		      }
 		  }
-
+// Median filtreleme sonucunu hesaplar ve tampona kaydeder
 		  buffer_counter_median = (filter_buffer_median[BUFFER_SIZE_MEDIAN / 2 - 1] + filter_buffer_median[BUFFER_SIZE_MEDIAN / 2]) / 2;
-
 		  filter_buffer[buffer_index] =  buffer_counter_median;
 		  buffer_index++;
 
 
 	  if(buffer_index == BUFFER_SIZE - 1){
+// Daha fazla veri biriktiğinde ADC değerini hesaplar
 		  buffer_index = 0;
 		  double sum=0;
 		  for(int i=0; i < BUFFER_SIZE; i++)
 			  sum = sum + filter_buffer[i];
 		 adc_value= sum/BUFFER_SIZE;
-		 setLedPeriyot(&led_1, adc_value);
+		 setLedPeriyot(&led_1, adc_value);// LED'in yanma periyodunu ayarlar
 	  }
   }
 
 	     if( adc_value != adc_value_old ) {
-
+// Önceki ADC değeri ile yeni ölçülen değeri karşılaştırır
 		  adc_value_old = adc_value;
 
 		  uint8_t veri[512] = {0};
+// İletiyi başlık ve ayracı ekleyerek oluşturur
 		  sprintf((char *)veri,"********************************\n\n\r  ");
 		  HAL_UART_Transmit(&huart5, veri, (uint16_t)strlen(veri),1000);
-
+// LED periyotlarını ve potansiyometre değerini iletiye ekler
 		  memset(veri,0,512);
 		  sprintf((char *)veri,"Led_1 period:%d ms  \n  ", (int)(led_1.period));
 		  HAL_UART_Transmit(&huart5, veri, (uint16_t)strlen(veri),1000);
