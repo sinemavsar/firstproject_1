@@ -31,23 +31,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .comment      00000043  00000000  00000000  000200cc  2**0
                   CONTENTS, READONLY
- 14 .debug_info   0000d963  00000000  00000000  0002010f  2**0
+ 14 .debug_info   0000d95e  00000000  00000000  0002010f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 00001deb  00000000  00000000  0002da72  2**0
+ 15 .debug_abbrev 00001deb  00000000  00000000  0002da6d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00000cb0  00000000  00000000  0002f860  2**3
+ 16 .debug_aranges 00000cb0  00000000  00000000  0002f858  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_rnglists 000009f1  00000000  00000000  00030510  2**0
+ 17 .debug_rnglists 000009f1  00000000  00000000  00030508  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  00021a41  00000000  00000000  00030f01  2**0
+ 18 .debug_macro  00021a41  00000000  00000000  00030ef9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   0000f2c8  00000000  00000000  00052942  2**0
+ 19 .debug_line   0000f2c7  00000000  00000000  0005293a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000d5868  00000000  00000000  00061c0a  2**0
+ 20 .debug_str    000d5868  00000000  00000000  00061c01  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  00003ca4  00000000  00000000  00137474  2**2
+ 21 .debug_frame  00003ca4  00000000  00000000  0013746c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000075  00000000  00000000  0013b118  2**0
+ 22 .debug_line_str 00000075  00000000  00000000  0013b110  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1350,17 +1350,15 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim2);
  8000fb4:	4854      	ldr	r0, [pc, #336]	; (8001108 <main+0x174>)
  8000fb6:	f002 fa9f 	bl	80034f8 <HAL_TIM_Base_Start_IT>
+  {
+    /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-
 
 	  ledHandle();
  8000fba:	f000 fb4b 	bl	8001654 <ledHandle>
 
-
-
-	  if ((time_count-buffer_counter_median)>5){
+	  if ((time_count-buffer_counter_median) > 5){
  8000fbe:	4b53      	ldr	r3, [pc, #332]	; (800110c <main+0x178>)
  8000fc0:	e9d3 4500 	ldrd	r4, r5, [r3]
  8000fc4:	4b52      	ldr	r3, [pc, #328]	; (8001110 <main+0x17c>)
@@ -1416,8 +1414,6 @@ int main(void)
  800102c:	4b3a      	ldr	r3, [pc, #232]	; (8001118 <main+0x184>)
  800102e:	2200      	movs	r2, #0
  8001030:	601a      	str	r2, [r3, #0]
-
-
 
 		  for (int i = 0; i < BUFFER_SIZE_MEDIAN - 1; i++) {
  8001032:	2300      	movs	r3, #0
@@ -1487,9 +1483,6 @@ int main(void)
  80010c6:	4b12      	ldr	r3, [pc, #72]	; (8001110 <main+0x17c>)
  80010c8:	601a      	str	r2, [r3, #0]
 
-
-
-
 		  filter_buffer[buffer_index] =  buffer_counter_median;
  80010ca:	4b11      	ldr	r3, [pc, #68]	; (8001110 <main+0x17c>)
  80010cc:	681a      	ldr	r2, [r3, #0]
@@ -1526,12 +1519,12 @@ int main(void)
  8001106:	bf00      	nop
  8001108:	20000104 	.word	0x20000104
  800110c:	20000190 	.word	0x20000190
- 8001110:	20000198 	.word	0x20000198
+ 8001110:	2000019c 	.word	0x2000019c
  8001114:	40140000 	.word	0x40140000
- 8001118:	200001f4 	.word	0x200001f4
- 800111c:	200001c8 	.word	0x200001c8
- 8001120:	200001f0 	.word	0x200001f0
- 8001124:	200001a0 	.word	0x200001a0
+ 8001118:	200001a4 	.word	0x200001a4
+ 800111c:	200001d0 	.word	0x200001d0
+ 8001120:	200001a0 	.word	0x200001a0
+ 8001124:	200001a8 	.word	0x200001a8
 			  sum = sum + filter_buffer[i];
  8001128:	4a6f      	ldr	r2, [pc, #444]	; (80012e8 <main+0x354>)
  800112a:	f8d7 3204 	ldr.w	r3, [r7, #516]	; 0x204
@@ -1572,9 +1565,8 @@ int main(void)
  8001184:	4619      	mov	r1, r3
  8001186:	485b      	ldr	r0, [pc, #364]	; (80012f4 <main+0x360>)
  8001188:	f000 fbce 	bl	8001928 <setLedPeriyot>
-
 	  }
-	  }
+  }
 
 	     if( adc_value != adc_value_old ) {
  800118c:	4b58      	ldr	r3, [pc, #352]	; (80012f0 <main+0x35c>)
@@ -1739,11 +1731,11 @@ int main(void)
 	  ledHandle();
  80012e4:	e669      	b.n	8000fba <main+0x26>
  80012e6:	bf00      	nop
- 80012e8:	200001a0 	.word	0x200001a0
+ 80012e8:	200001a8 	.word	0x200001a8
  80012ec:	40340000 	.word	0x40340000
- 80012f0:	2000019c 	.word	0x2000019c
+ 80012f0:	20000198 	.word	0x20000198
  80012f4:	20000000 	.word	0x20000000
- 80012f8:	2000019e 	.word	0x2000019e
+ 80012f8:	2000019a 	.word	0x2000019a
  80012fc:	08004e54 	.word	0x08004e54
  8001300:	2000014c 	.word	0x2000014c
  8001304:	08004e7c 	.word	0x08004e7c
@@ -2330,7 +2322,7 @@ void ledHandle(void)
 {
  8001654:	b5b0      	push	{r4, r5, r7, lr}
  8001656:	af00      	add	r7, sp, #0
-	  if((time_count-led_1.count)>led_1.period/2){
+	  if((time_count - led_1.count) > led_1.period/2){
  8001658:	4bac      	ldr	r3, [pc, #688]	; (800190c <ledHandle+0x2b8>)
  800165a:	e9d3 4500 	ldrd	r4, r5, [r3]
  800165e:	4bac      	ldr	r3, [pc, #688]	; (8001910 <ledHandle+0x2bc>)
@@ -2361,7 +2353,7 @@ void ledHandle(void)
  8001698:	4603      	mov	r3, r0
  800169a:	2b00      	cmp	r3, #0
  800169c:	d01d      	beq.n	80016da <ledHandle+0x86>
-			  led_1.count=time_count;
+			  led_1.count = time_count;
  800169e:	4b9b      	ldr	r3, [pc, #620]	; (800190c <ledHandle+0x2b8>)
  80016a0:	e9d3 2300 	ldrd	r2, r3, [r3]
  80016a4:	4610      	mov	r0, r2
@@ -2400,7 +2392,7 @@ void ledHandle(void)
 
 		  }
 
-		  if((time_count-led_2.count)>led_2.period/2){
+		  if((time_count - led_2.count) > led_2.period/2){
  80016da:	4b8c      	ldr	r3, [pc, #560]	; (800190c <ledHandle+0x2b8>)
  80016dc:	e9d3 4500 	ldrd	r4, r5, [r3]
  80016e0:	4b8d      	ldr	r3, [pc, #564]	; (8001918 <ledHandle+0x2c4>)
@@ -2431,7 +2423,7 @@ void ledHandle(void)
  800171a:	4603      	mov	r3, r0
  800171c:	2b00      	cmp	r3, #0
  800171e:	d01d      	beq.n	800175c <ledHandle+0x108>
-			  led_2.count=time_count;
+			  led_2.count = time_count;
  8001720:	4b7a      	ldr	r3, [pc, #488]	; (800190c <ledHandle+0x2b8>)
  8001722:	e9d3 2300 	ldrd	r2, r3, [r3]
  8001726:	4610      	mov	r0, r2
@@ -2470,7 +2462,7 @@ void ledHandle(void)
 
 		  }
 
-		  if((time_count-led_3.count)>led_3.period/2){
+		  if((time_count - led_3.count) > led_3.period/2){
  800175c:	4b6b      	ldr	r3, [pc, #428]	; (800190c <ledHandle+0x2b8>)
  800175e:	e9d3 4500 	ldrd	r4, r5, [r3]
  8001762:	4b6e      	ldr	r3, [pc, #440]	; (800191c <ledHandle+0x2c8>)
@@ -2501,7 +2493,7 @@ void ledHandle(void)
  800179c:	4603      	mov	r3, r0
  800179e:	2b00      	cmp	r3, #0
  80017a0:	d01d      	beq.n	80017de <ledHandle+0x18a>
-			  led_3.count=time_count;
+			  led_3.count = time_count;
  80017a2:	4b5a      	ldr	r3, [pc, #360]	; (800190c <ledHandle+0x2b8>)
  80017a4:	e9d3 2300 	ldrd	r2, r3, [r3]
  80017a8:	4610      	mov	r0, r2
@@ -2540,7 +2532,7 @@ void ledHandle(void)
 
 		  }
 
-		  if((time_count-led_4.count)>led_4.period/2){
+		  if((time_count - led_4.count) > led_4.period/2){
  80017de:	4b4b      	ldr	r3, [pc, #300]	; (800190c <ledHandle+0x2b8>)
  80017e0:	e9d3 4500 	ldrd	r4, r5, [r3]
  80017e4:	4b4e      	ldr	r3, [pc, #312]	; (8001920 <ledHandle+0x2cc>)
@@ -2571,7 +2563,7 @@ void ledHandle(void)
  800181e:	4603      	mov	r3, r0
  8001820:	2b00      	cmp	r3, #0
  8001822:	d01d      	beq.n	8001860 <ledHandle+0x20c>
-			  led_4.count=time_count;
+			  led_4.count = time_count;
  8001824:	4b39      	ldr	r3, [pc, #228]	; (800190c <ledHandle+0x2b8>)
  8001826:	e9d3 2300 	ldrd	r2, r3, [r3]
  800182a:	4610      	mov	r0, r2

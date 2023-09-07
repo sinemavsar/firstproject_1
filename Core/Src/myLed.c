@@ -16,8 +16,8 @@ led_t led_4 = {0, 0, 0.0, 1000};
 
 void ledHandle(void)
 {
-	  if((time_count-led_1.count)>led_1.period/2){
-			  led_1.count=time_count;
+	  if((time_count - led_1.count) > led_1.period/2){
+			  led_1.count = time_count;
 
 		   if (led_1.durum == 0) {
 			   led_1.durum = 1;
@@ -30,8 +30,8 @@ void ledHandle(void)
 
 		  }
 
-		  if((time_count-led_2.count)>led_2.period/2){
-			  led_2.count=time_count;
+		  if((time_count - led_2.count) > led_2.period/2){
+			  led_2.count = time_count;
 
 		   if (led_2.durum == 0) {
 			   led_2.durum = 1;
@@ -44,8 +44,8 @@ void ledHandle(void)
 
 		  }
 
-		  if((time_count-led_3.count)>led_3.period/2){
-			  led_3.count=time_count;
+		  if((time_count - led_3.count) > led_3.period/2){
+			  led_3.count = time_count;
 
 		   if (led_3.durum == 0) {
 			   led_3.durum = 1;
@@ -58,8 +58,8 @@ void ledHandle(void)
 
 		  }
 
-		  if((time_count-led_4.count)>led_4.period/2){
-			  led_4.count=time_count;
+		  if((time_count - led_4.count) > led_4.period/2){
+			  led_4.count = time_count;
 
 		   if (led_4.durum == 0) {
 			   led_4.durum = 1;

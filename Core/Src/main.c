@@ -18,13 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "myLed.h"
-
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
-
+#include "myLed.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +46,7 @@
 /* USER CODE BEGIN PM */
 
 
-#define BUFFER_SIZE				20
+#define BUFFER_SIZE		        20
 #define BUFFER_SIZE_MEDIAN		20
 
 
@@ -65,53 +61,22 @@ UART_HandleTypeDef huart5;
 
 /* USER CODE BEGIN PV */
 
-
-
+// Ölçüm ve zamanlama değişkenleri
 double time_count = 0;
-
-/*led_t led_1 = 0;
-led_t led_2 = 0;
-led_t led_3 = 0;
-led_t led_4 = 0;*/
-
-
-
-/*int led_count_1=0;
-int led_count_2=0;
-int led_count_3=0;
-int led_count_4=0;
-
-int led_durum_1=0;
-int led_durum_2=0;
-int led_durum_3=0;
-int led_durum_4=0;
-
-float Led_1_freq=0;
-float Led_2_freq=0;
-float Led_3_freq=0;
-float Led_4_freq=0;
-
-int Led_1_Pri = 1000;
-int Led_2_Pri = 1000;
-int Led_3_Pri = 1000;
-int Led_4_Pri = 1000;*/
-
-int uart_count = 0;
-int uart_count_1 = 0;
-int buffer_counter = 0;
-int buffer_counter_median = 0;
-
 uint16_t adc_value = 0;
 uint16_t adc_value_old = 0;
 
+// UART sayacı
+int uart_count = 0;
+int uart_count_1 = 0;
 
-
-uint16_t filter_buffer[BUFFER_SIZE];
-uint16_t filter_buffer_median[BUFFER_SIZE_MEDIAN];
-
+// Buffer ve indeks değişkenleri
+int buffer_counter = 0;
+int buffer_counter_median = 0;
 int buffer_index = 0;
 int buffer_index_median = 0;
-
+uint16_t filter_buffer[BUFFER_SIZE];
+uint16_t filter_buffer_median[BUFFER_SIZE_MEDIAN];
 
 /* USER CODE END PV */
 
@@ -194,13 +159,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-
-
 	  ledHandle();
 
-
-
-	  if ((time_count-buffer_counter_median)>5){
+	  if ((time_count-buffer_counter_median) > 5){
 	 		  buffer_counter_median=time_count;
 	 		  filter_buffer_median[buffer_index_median] =  Read_ADC();
 	 		  buffer_index_median++;
@@ -208,8 +169,6 @@ int main(void)
 
 	  if(buffer_index_median == BUFFER_SIZE_MEDIAN - 1){
 		  buffer_index_median=0;
-
-
 
 		  for (int i = 0; i < BUFFER_SIZE_MEDIAN - 1; i++) {
 		      for (int j = i + 1; j < BUFFER_SIZE_MEDIAN; j++) {
@@ -224,9 +183,6 @@ int main(void)
 
 		  buffer_counter_median = (filter_buffer_median[BUFFER_SIZE_MEDIAN / 2 - 1] + filter_buffer_median[BUFFER_SIZE_MEDIAN / 2]) / 2;
 
-
-
-
 		  filter_buffer[buffer_index] =  buffer_counter_median;
 		  buffer_index++;
 
@@ -238,9 +194,8 @@ int main(void)
 			  sum = sum + filter_buffer[i];
 		 adc_value= sum/BUFFER_SIZE;
 		 setLedPeriyot(&led_1, adc_value);
-
 	  }
-	  }
+  }
 
 	     if( adc_value != adc_value_old ) {
 
